@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { CallToAPI } from './service';
+import Main from './Main';
 
 class App extends Component {
 
@@ -25,6 +26,7 @@ class App extends Component {
         <div className="App-header">
           <h2>Product Listing Creator</h2>
         </div>
+        <Main />
         <p className="App-intro">
          {this.state.test}
 	       </p>
