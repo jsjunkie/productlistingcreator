@@ -10,9 +10,14 @@ class Main extends Component {
 	}
 
 	render () {
+		var uploadMessage = this.props.uploadMessage 
+							  ?	<div className={`uploadMessage margin10 ${this.props.style}`}>{this.props.uploadMessage}</div>
+							  : '';
 		return (
 			<div className="main">
+				{uploadMessage}
 				<input 
+					name="csv"
 					ref='fileinput'
 					type="file"
 					className="uploadInput" 

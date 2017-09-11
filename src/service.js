@@ -11,7 +11,9 @@ export const service = {
 			body: data
 		}).then(res => {
 			if (res.status === 200){
-				callback()
+				res.text().then(message => {
+					callback(message);
+				})
 			} else {
 				errorCallback(res.status);
 			}

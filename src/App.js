@@ -9,14 +9,25 @@ class App extends Component {
   constructor () {
 	  super();
  	  this.state = {
+      uploadMessage: '',
+      messageStyle: ''
    	};
   }
 
   uploadFile  (file) {
     service.uploadFile(file, res => {
-
+      this.setState({uploadMessage: res, messageStyle: 'uploadMessageGreen'})
+      var t = setInterval(() => {
+        this.setState({uploadMessage: ''});
+        clearInterval(t);
+      }, 3000);
     }, err => {
-      console.log(err);
+      console.error(err);
+      this.setState({uploadMessage: "There was an error", messageStyle: 'uploadMessagePink'});
+      var t = setInterval(() => {
+        this.setState({uploadMessage: ''});
+        clearInterval(t);
+      }, 3000)
     });
   }
 
@@ -26,7 +37,9 @@ class App extends Component {
         <div className="App-header">
           <h2>Product Listing Creator</h2>
         </div>
-        <Main uploadFile={(file) => this.uploadFile(file)}/>
+        <Main uploadFile={(file) => this.uploadFile(file)} 
+              uploadMessage = {this.state.uploadMessage}
+              style={this.state.messageStyle}/>
       </div>
     );
   }
