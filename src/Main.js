@@ -1,17 +1,41 @@
 import React, { Component } from 'react';
 import './Main.css';
+import { service } from './service';
 
 class Main extends Component {
-	uploadFile  () {
-		var input = this.refs.fileinput;
-		var file = input.files[0];
 
-		this.props.uploadFile(file);
-	}
+  constructor () {
+	  super();
+ 	  this.state = {
+      	uploadMessage: '',
+      	messageStyle: ''
+   	  };
+  }
+
+  uploadFile  () {
+  	var input = this.refs.fileinput;
+	var file = input.files[0];
+    service.uploadFile(file, res => {
+      this.setState({uploadMessage: res, messageStyle: 'uploadMessageGreen'})
+      var t = setInterval(() => {
+        this.setState({uploadMessage: ''});
+        clearInterval(t);
+      }, 3000);
+    }, err => {
+      console.error(err);
+      this.setState({uploadMessage: "There was an error", messageStyle: 'uploadMessagePink'});
+      var t = setInterval(() => {
+        this.setState({uploadMessage: ''});
+        clearInterval(t);
+      }, 3000)
+    });
+  }
+
+	
 
 	render () {
-		var uploadMessage = this.props.uploadMessage 
-							  ?	<div className={`uploadMessage margin10 ${this.props.style}`}>{this.props.uploadMessage}</div>
+		var uploadMessage = this.state.uploadMessage 
+							  ?	<div className={`uploadMessage margin10 ${this.state.messageStyle}`}>{this.state.uploadMessage}</div>
 							  : '';
 		return (
 			<div className="main">

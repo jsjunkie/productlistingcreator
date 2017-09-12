@@ -1,45 +1,21 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { Link } from 'react-router-dom';
 import './App.css';
-import { service } from './service';
-import Main from './Main';
 
 class App extends Component {
 
-  constructor () {
-	  super();
- 	  this.state = {
-      uploadMessage: '',
-      messageStyle: ''
-   	};
-  }
-
-  uploadFile  (file) {
-    service.uploadFile(file, res => {
-      this.setState({uploadMessage: res, messageStyle: 'uploadMessageGreen'})
-      var t = setInterval(() => {
-        this.setState({uploadMessage: ''});
-        clearInterval(t);
-      }, 3000);
-    }, err => {
-      console.error(err);
-      this.setState({uploadMessage: "There was an error", messageStyle: 'uploadMessagePink'});
-      var t = setInterval(() => {
-        this.setState({uploadMessage: ''});
-        clearInterval(t);
-      }, 3000)
-    });
-  }
+  
 
   render() {
     return (
       <div className="App">
         <div className="App-header">
-          <h2>Product Listing Creator</h2>
+          <h2><Link className="App-link" to="/">Product Listing Creator</Link></h2>
+          <ul className="App-links">
+            <li><Link className="App-link Nav-link" to="/">Home</Link></li>
+            <li><Link className="App-link Nav-link" to="/mainlist">List</Link></li>
+          </ul>
         </div>
-        <Main uploadFile={(file) => this.uploadFile(file)} 
-              uploadMessage = {this.state.uploadMessage}
-              style={this.state.messageStyle}/>
       </div>
     );
   }
