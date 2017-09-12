@@ -34,5 +34,45 @@ export const service = {
 			.catch(function(err){
 				errorCallback(err);
 			})
+	},
+
+	addToAmazon: function(id, callback, errorCallback){
+		fetch(API_URL + '/addtoamazon/' + id)
+		.then(res => {
+			if (res.status === 200){
+				callback();
+			} else {
+				errorCallback(res.status)
+			}
+		}).catch(err => {
+			errorCallback(err);
+		})
+	},
+
+	removeFromAmazon: function(id, callback, errorCallback){
+		fetch(API_URL + '/removefromamazon/' + id)
+		.then(res => {
+			if (res.status === 200){
+				callback();
+			} else {
+				errorCallback(res.status)
+			}
+		}).catch(err => {
+			errorCallback(err);
+		})
+	},
+
+	getAmazonProducts: function(callback, errorCallback) {
+		fetch(API_URL + '/amazonlist')
+			.then(function(res){
+				res.json().then(data => {
+					callback(data);
+				}).catch(err => {
+					errorCallback(err);
+				})
+			})
+			.catch(function(err){
+				errorCallback(err);
+			})
 	}
 }

@@ -13,7 +13,8 @@ class App extends Component {
           <h2><Link className="App-link" to="/">Product Listing Creator</Link></h2>
           <ul className="App-links">
             <li><Link className="App-link Nav-link" to="/">Home</Link></li>
-            <li><Link className="App-link Nav-link" to="/mainlist">List</Link></li>
+            <li><Link className="App-link Nav-link" to="/mainlist">Main List</Link></li>
+            <li><Link className="App-link Nav-link" to="/amazonlist">Amazon List</Link></li>
           </ul>
         </div>
       </div>

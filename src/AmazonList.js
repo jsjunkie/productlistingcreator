@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { service } from './service';
 import './MainList.css'
 
-class MainList extends Component {
+class AmazonList extends Component {
 	constructor () {
 		super();
 
@@ -14,17 +14,19 @@ class MainList extends Component {
 	}
 
 	componentDidMount () {
-		service.getProducts((data) => {
+		service.getAmazonProducts((data) => {
 			this.setState({list: data});
 		}, function(err){
 			console.log(err);
 		})
 	}
 
-	addToAmazon (id) {
-		debugger;
-		service.addToAmazon(id, () => {
-			this.setState({uploadMessage: "Added to Amazon", messageStyle: 'uploadMessageGreen'})
+	removeFromAmazon (id) {
+		service.removeFromAmazon(id, () => {
+			var newlist = this.state.list.filter((product) => {
+				return product._id !== id;
+			});
+			this.setState({list: newlist, uploadMessage: "Removed from Amazon", messageStyle: 'uploadMessageGreen'})
       		var t = setInterval(() => {
         		this.setState({uploadMessage: ''});
         		clearInterval(t);
@@ -36,14 +38,14 @@ class MainList extends Component {
         		this.setState({uploadMessage: ''});
         		clearInterval(t);
       		}, 3000);
-		})
+		});
 	}
 
 	render () {
 		var message = this.state.uploadMessage 
 							  ?	<div className={`uploadMessage margin10 ${this.state.messageStyle}`}>{this.state.uploadMessage}</div>
 							  : '';
-		var heading = <div className="ProductListHeading">Main list</div>
+		var heading = <div className="ProductListHeading">Amazon list</div>
 		var noitem = this.state.list.length === 0 
 						? <div className = "NoProductMessage">No item is added. Upload a CSV on Home Screen.</div>
 						: '';
@@ -54,12 +56,10 @@ class MainList extends Component {
 				return <div className="ProductRowDetail">{product[key]}</div>
 			});
 
-			var addbutton = !product.amazon ?
-							<button className="ProductRowButton" onClick={() => this.addToAmazon(product._id)}>Add to Amazon</button> :
-							'';
+			var button = <button className="ProductRowButton" onClick={() => this.removeFromAmazon(product._id)}>Remove</button>
 			return (<div key={product._id} className="ProductRow">
 						<div style={{display:'inline-block', width: '90%'}}>{spans}</div>
-						{addbutton}
+						{button}
 					</div>);
 		})
 		return (
@@ -73,4 +73,4 @@ class MainList extends Component {
 	}
 }
 
-export default MainList;
+export default AmazonList;
