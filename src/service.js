@@ -20,5 +20,19 @@ export const service = {
 		}).catch(err => {
 			errorCallback(err);
 		})
+	},
+
+	getProducts : function(callback, errorCallback){
+		fetch(API_URL + '/mainlist')
+			.then(function(res){
+				res.json().then(data => {
+					callback(data);
+				}).catch(err => {
+					errorCallback(err);
+				})
+			})
+			.catch(function(err){
+				errorCallback(err);
+			})
 	}
 }
