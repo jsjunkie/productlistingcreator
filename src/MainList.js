@@ -16,15 +16,19 @@ class MainList extends Component {
 	componentDidMount () {
 		service.getProducts((data) => {
 			this.setState({list: data});
-		}, function(err){
+		}, (err) => {
 			console.log(err);
+			this.setState({uploadMessage: "There was an error", messageStyle: 'uploadMessagePink'});
 		})
 	}
 
 	addToAmazon (id) {
-		debugger;
 		service.addToAmazon(id, () => {
-			this.setState({uploadMessage: "Added to Amazon", messageStyle: 'uploadMessageGreen'})
+			var newlist = this.state.list.map(product => {
+				return product._id === id ? Object.assign({}, product, {amazon: true})
+					: Object.assign({}, product);
+			});
+			this.setState({list: newlist, uploadMessage: "Added to Amazon", messageStyle: 'uploadMessageGreen'})
       		var t = setInterval(() => {
         		this.setState({uploadMessage: ''});
         		clearInterval(t);
@@ -44,18 +48,18 @@ class MainList extends Component {
 							  ?	<div className={`uploadMessage margin10 ${this.state.messageStyle}`}>{this.state.uploadMessage}</div>
 							  : '';
 		var heading = <div className="ProductListHeading">Main list</div>
-		var noitem = this.state.list.length === 0 
+		var noitem = this.state.list.length === 0 && this.state.uploadMessage === ''
 						? <div className = "NoProductMessage">No item is added. Upload a CSV on Home Screen.</div>
 						: '';
 		var rows = this.state.list.map(product => {
 			var spans = Object.keys(product).filter((key) => {
 				return key !== "_id";
 			}).map(key => {
-				return <div className="ProductRowDetail">{product[key]}</div>
+				return <div key={product._id+key} className="ProductRowDetail">{product[key]}</div>
 			});
 
 			var addbutton = !product.amazon ?
-							<button className="ProductRowButton" onClick={() => this.addToAmazon(product._id)}>Add to Amazon</button> :
+							<button key={product._id+'button'} className="ProductRowButton" onClick={() => this.addToAmazon(product._id)}>Add to Amazon</button> :
 							'';
 			return (<div key={product._id} className="ProductRow">
 						<div style={{display:'inline-block', width: '90%'}}>{spans}</div>

@@ -16,8 +16,9 @@ class AmazonList extends Component {
 	componentDidMount () {
 		service.getAmazonProducts((data) => {
 			this.setState({list: data});
-		}, function(err){
+		}, err => {
 			console.log(err);
+			this.setState({uploadMessage: "There was an error", messageStyle: 'uploadMessagePink'});
 		})
 	}
 
@@ -46,8 +47,8 @@ class AmazonList extends Component {
 							  ?	<div className={`uploadMessage margin10 ${this.state.messageStyle}`}>{this.state.uploadMessage}</div>
 							  : '';
 		var heading = <div className="ProductListHeading">Amazon list</div>
-		var noitem = this.state.list.length === 0 
-						? <div className = "NoProductMessage">No item is added. Upload a CSV on Home Screen.</div>
+		var noitem = this.state.list.length === 0 && this.state.uploadMessage === ''
+						? <div className = "NoProductMessage">No item is added. Add item from Main List Screen.</div>
 						: '';
 		var rows = this.state.list.map(product => {
 			var spans = Object.keys(product).filter((key) => {
